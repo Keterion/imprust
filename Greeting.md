@@ -1,6 +1,22 @@
 ## IMPRUST
-A slow cli presentation thingy
+A slow cli presentation thingy.
+The presentation format is in markdown and three dashes are used to separate slides.
+It doesn't btw                                               a
 
----
+\sep(erator)\
 
-Penis
+Penis = funny
+
+
+\sep(erator)\
+.--.
+|__| .-------.
+|=.| |.-----.|
+|--| || KCK ||
+|  | |'-----'|
+|__|~')_____('
+
+\sep(erator)\
+
+Lets goo amogus
+sussy baka

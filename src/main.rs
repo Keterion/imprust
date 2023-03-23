@@ -19,16 +19,10 @@ fn main() {
     );
 
     let greeting = read_file("Greeting.md");
-    let slides: Vec<&str> = greeting.split("---").map(|s| s.trim()).collect();
-    let mut handler: Handler = Handler::new(slides, term_dims, padding, Align::Center);
+    let slides: Vec<&str> = greeting.split("\\sep(erator)\\").map(|s| s.trim()).collect();
+    let mut handler: Handler = Handler::new(slides, term_dims, padding, Align::Left);
     
-    //println!("{}", greeting);
     let mut s: String = String::new();
-    //println!("Beginning loop");
-    // _ = clear();
-    // slide.display();
-    // println!("{s}");
-    //slide.slice_str(&s);
     _ = clear();
     loop {
         print!("n: next | b: back | gt [num]: goto num >> ");
@@ -37,8 +31,6 @@ fn main() {
         handler.parse_command(&s);
         s.clear();
     }
-
-    
 }
 
 struct Handler {

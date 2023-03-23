@@ -36,9 +36,9 @@ pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, b
             }
         }
     }
-    if input.len() % 2 != 0 {
-        l.push_str(separator); // you gotta do this because there's one character missing without it
-    }
+    // if input.len() % 2 != 0 {
+    //     l.push_str(separator); // you gotta do this because there's one character missing without it
+    // }
     l.push_str(box_char); // pushes the vertical box character
     // the for _ in 1..margin are started at 1 because the box character has to be accounted for
     return l;
@@ -78,7 +78,7 @@ pub fn border_text(slide: &Slide) -> String {
     }
     s.push_str(&(top_right.to_owned() + "\n"));
 
-    for _ in 1..empty_height/2 {
+    for _ in 1..((empty_height as f64 / 2.0 ).round() - 1.0) as usize {
         s.push_str(&empty_line);
     }
 
@@ -107,8 +107,8 @@ pub fn slice_str(data: &str, dimensions: &(usize, usize), margins: &(usize, usiz
     let remaining = data.clone().lines();
     for mut line in remaining {
         while line.len() > (dimensions.0 - margins.0 - margins.1) {
-            let (part_1, part_2): (&str, &str) = line.split_at(dimensions.0 - margins.0 - margins.1).to_owned();
-            split_str.push_str(&(part_1.to_owned() + "\n"));
+            let (part_1, part_2): (&str, &str) = line.split_at(dimensions.0 - margins.0 - margins.1 - 1).to_owned();
+            split_str.push_str(&(part_1.to_owned() + "-\n"));
             line = &mut part_2.clone();
         }
         split_str.push_str(line);
