@@ -19,12 +19,10 @@ fn main() {
     );
 
     let greeting = read_file("Greeting.md");
-    let mut slides: Vec<&str> = greeting.split("---").map(|s| s.trim()).collect();
-    let mut handler: handler = handler::new(slides, term_dims, padding, Align::Center);
+    let slides: Vec<&str> = greeting.split("---").map(|s| s.trim()).collect();
+    let mut handler: Handler = Handler::new(slides, term_dims, padding, Align::Center);
     
     //println!("{}", greeting);
-
-    let slide: Slide = Slide::new( &greeting, &(term_dims.0, term_dims.1), &padding, &Align::Center, 1);
     let mut s: String = String::new();
     //println!("Beginning loop");
     // _ = clear();
@@ -43,14 +41,14 @@ fn main() {
     
 }
 
-struct handler {
+struct Handler {
     slides: Vec<Slide>,
-    currPos: usize,
+    curr_pos: usize,
 }
 
-impl handler {
-    pub fn new(contents: Vec<&str>, dimensions: Dims, margins: Dims, align: Align) -> handler {
-        handler {
+impl Handler {
+    pub fn new(contents: Vec<&str>, dimensions: Dims, margins: Dims, align: Align) -> Handler {
+        Handler {
             slides: {
                 let mut v: Vec<Slide> = vec![];
                 let mut i = 0;
@@ -60,7 +58,7 @@ impl handler {
                 }
                 v
             },
-            currPos: 0,
+            curr_pos: 0,
         }
     }
     pub fn parse_command(&mut self, command: &str) {
@@ -83,31 +81,31 @@ impl handler {
         }
     }
     fn next(&mut self) {
-        if (self.currPos + 1) > (self.slides.len()-1) {
+        if (self.curr_pos + 1) > (self.slides.len()-1) {
             self.display_current();
             return;
         }
-        self.currPos += 1;
+        self.curr_pos += 1;
         self.display_current();
     }
     fn back(&mut self) {
-        if (self.currPos as isize - 1) < 0 {
+        if (self.curr_pos as isize - 1) < 0 {
             self.display_current();
             return;
         }
-        self.currPos -= 1;
+        self.curr_pos -= 1;
         self.display_current();
     }
-    fn go_to(&mut self, nPos: usize) {
-        if nPos > (self.slides.len()-1) {
+    fn go_to(&mut self, n_pos: usize) {
+        if n_pos > (self.slides.len()-1) {
             self.display_current();
             return;
         }
-        self.currPos = nPos;
+        self.curr_pos = n_pos;
         self.display_current();
     }
     fn display_current(&self) {
         _ = clear();
-        self.slides.get(self.currPos).unwrap().display();
+        self.slides.get(self.curr_pos).unwrap().display();
     }
 }
