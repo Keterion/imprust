@@ -54,11 +54,14 @@ fn validate_string_len(width: usize, input: &str, margin: (usize, usize)) -> boo
 }
 
 #[allow(unused)]
+#[derive(Clone)]
 pub enum Align {
     Left,
     Center,
     Right,
 }
+
+
 
 pub fn border_text(slide: &Slide) -> String {
     let (top_left, top_right, bottom_left, bottom_right) = ("\u{250c}", "\u{2510}", "\u{2514}", &format!("{}", slide.pos));

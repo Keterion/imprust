@@ -10,12 +10,12 @@ pub struct Slide {
 }
 
 impl Slide {
-    pub fn new(contents: &str, dimensions: &(usize, usize), margins: &(usize, usize), align: Align, pos: usize) -> Slide {
+    pub fn new(contents: &str, dimensions: &(usize, usize), margins: &(usize, usize), align: &Align, pos: usize) -> Slide {
         Slide {
             contents: slice_str(contents, dimensions, margins),
             dimensions: dimensions.to_owned(),
             margins: margins.to_owned(),
-            text_align: align,
+            text_align: align.to_owned(),
             outline: true,
             pos: pos,
         }
