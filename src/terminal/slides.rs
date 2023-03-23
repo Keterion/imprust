@@ -6,17 +6,18 @@ pub struct Slide {
     pub margins: (usize, usize),
     pub text_align: Align,
     outline: bool,
-
+    pub pos: usize,
 }
 
 impl Slide {
-    pub fn new(contents: &str, dimensions: &(usize, usize), margins: &(usize, usize), align: Align) -> Slide {
+    pub fn new(contents: &str, dimensions: &(usize, usize), margins: &(usize, usize), align: Align, pos: usize) -> Slide {
         Slide {
             contents: slice_str(contents, dimensions, margins),
             dimensions: dimensions.to_owned(),
             margins: margins.to_owned(),
             text_align: align,
             outline: true,
+            pos: pos,
         }
     }
     pub fn display(&self) {

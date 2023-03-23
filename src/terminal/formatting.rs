@@ -1,5 +1,5 @@
 use super::slides::Slide;
-pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, box_char: &str) -> String {
+pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, box_char: &str, separator: &str) -> String {
     let extra_whitespace = width - input.len() - (margin.0 + margin.1); // the remaining space in the line, also the box characters removed
     // the extra whitespace is the remaining space in a line after: text, margins, and the extra two characters for the box have been removed
     let mut l: String = String::new();
@@ -10,34 +10,34 @@ pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, b
     match align {
         Align::Left => {
             for _ in 1..margin.0 {
-                l.push_str(" ");
+                l.push_str(separator);
             }
             l.push_str(input);
             for _ in 1..(margin.1 + extra_whitespace) {
-                l.push_str(" ");
+                l.push_str(separator);
             }
         },
         Align::Center => {
             for _ in 1..(margin.0 + extra_whitespace/2) {
-                l.push_str(" ");
+                l.push_str(separator);
             }
             l.push_str(input);
             for _ in 1..(margin.1 + extra_whitespace/2) {
-                l.push_str(" ");
+                l.push_str(separator);
             }
         },
         Align::Right => {
             for _ in 1..(margin.0 + extra_whitespace) {
-                l.push_str(" ");
+                l.push_str(separator);
             }
             l.push_str(input);
             for _ in 1..margin.1 {
-                l.push_str(" ");
+                l.push_str(separator);
             }
         }
     }
     if input.len() % 2 != 0 {
-        l.push_str(" "); // you gotta do this because there's one character missing without it
+        l.push_str(separator); // you gotta do this because there's one character missing without it
     }
     l.push_str(box_char); // pushes the vertical box character
     // the for _ in 1..margin are started at 1 because the box character has to be accounted for
@@ -61,12 +61,13 @@ pub enum Align {
 }
 
 pub fn border_text(slide: &Slide) -> String {
-    let (top_left, top_right, bottom_left, bottom_right) = ("\u{250c}", "\u{2510}", "\u{2514}", "\u{2518}");
+    let (top_left, top_right, bottom_left, bottom_right) = ("\u{250c}", "\u{2510}", "\u{2514}", &format!("{}", slide.pos));
     let (horizontal_dash, vertical_dash) = ("\u{2500}", "\u{2502}");
+    let separator: &str = " ";
     let mut s: String = String::new();
     
     let empty_height: usize = slide.dimensions.1 - slide.contents.lines().count();
-    let empty_line: String = space(slide.dimensions.0, slide.margins, "", &slide.text_align, vertical_dash) + "\n";
+    let empty_line: String = space(slide.dimensions.0, slide.margins, "", &slide.text_align, vertical_dash, separator) + "\n";
     // upper box
     s.push_str(top_left);
     for _ in 2..slide.dimensions.0 {
@@ -80,7 +81,7 @@ pub fn border_text(slide: &Slide) -> String {
 
     // text
     for line in slide.contents.lines() { // prints the lines and the sides of the box
-        s.push_str(&(space(slide.dimensions.0, slide.margins, line, &slide.text_align, vertical_dash) + "\n"));
+        s.push_str(&(space(slide.dimensions.0, slide.margins, line, &slide.text_align, vertical_dash, separator) + "\n"));
     }
 
     for _ in 1..empty_height/2 {
