@@ -1,10 +1,11 @@
+use self::word_formatting::colorize;
+
 use super::slides::Slide;
-pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, box_char: &str, separator: &str) -> String {
+pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, separator: &str) -> String {
     //println!("input: {1}, length: {}", input.len(), input); //debugging
     let extra_whitespace = width - input.len() - (margin.0 + margin.1); // the remaining space in the line, also the box characters removed
     // the extra whitespace is the remaining space in a line after: text, margins, and the extra two characters for the box have been removed
     let mut l: String = String::new();
-    l.push_str(box_char); 
 
     match align {
         // the for _ in 1..margin are started at 1 because the box character has to be accounted for
@@ -45,8 +46,10 @@ pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, b
             }
         }
     }
-    l.push_str(box_char); // pushes the vertical box character
     return l;
+}
+pub fn box_line(line: &str, box_char: &str) -> String { // adds the vertical lines on the sides of a line
+    return format!("{}{}{}", box_char, line, box_char);
 }
 
 #[derive(Clone)]
@@ -81,7 +84,13 @@ pub fn border_text(slide: &Slide) -> String {
         } else {
             (empty_height/2+1, empty_height/2)
         };
-    let empty_line: String = space(slide.dimensions.0, slide.margins, "", &slide.text_align, vertical_dash, separator) + "\n";
+    let empty_line: String = box_line(
+        &space(
+            slide.dimensions.0, 
+            slide.margins, "", 
+            &slide.text_align, separator), 
+            vertical_dash
+        ) + "\n";
 
     // upper box
     s.push_str(top_left);
@@ -97,7 +106,23 @@ pub fn border_text(slide: &Slide) -> String {
 
     // text
     for line in slide.contents.lines() { // prints the lines and the sides of the box
-        s.push_str(&(space(slide.dimensions.0, slide.margins, line, &slide.text_align, vertical_dash, separator) + "\n"));
+        s.push_str(&(
+            box_line(
+                &colorize( // adds coloring to a string
+                    &space( // adds margins
+                        slide.dimensions.0, 
+                        slide.margins, 
+                        line,
+                        &slide.text_align,
+                        separator)
+                    ),
+                    vertical_dash
+                ) + "\n"
+            )
+        );
+        // SOOO, you gotta first add the margins.
+        // THEN, you colorize the line if it contains, i.e, a heading
+        // THEN, you add the box characters, so those don't get colored
     }
 
     // empty lines
@@ -150,4 +175,15 @@ pub fn slice_str(data: &str, dimensions: &(usize, usize), margins: &(usize, usiz
         sliced_str.push_str("\n");
     }
     return sliced_str;
+}
+
+mod word_formatting {
+    use colored::Colorize;
+    pub fn colorize(line: &str) -> String {
+        match line.trim().split_whitespace().nth(0).unwrap() {
+            "#" => line.bright_green().to_string(),
+            "##" => line.bright_cyan().to_string(),
+            _ => line.to_string(),
+        }
+    }
 }
