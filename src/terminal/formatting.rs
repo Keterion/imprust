@@ -72,10 +72,10 @@ pub fn border_text(slide: &Slide) -> String {
     const PROMPT: isize = 1;
     let empty_height: usize = {
         let space: isize = slide.dimensions.1 as isize - slide.contents.lines().count() as isize - TAKEN_BY_HORIZONTAL_BORDER - PROMPT;
-        if space < 0 {
-            0
-        } else {
+        if space >= 0 {
             space as usize
+        } else {
+            0
         }
     };
     let (empty_top, empty_bottom): (usize, usize) =
