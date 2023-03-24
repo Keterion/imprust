@@ -11,6 +11,7 @@ use clearscreen::clear;
 
 type Dims = (usize, usize);
 fn main() {
+
     let term_dims: Dims = term_size::dimensions().expect("Couldn't get terminal dimensions");
     // term_dims.0 -> width
     let padding: Dims = (

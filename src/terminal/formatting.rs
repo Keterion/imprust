@@ -69,17 +69,27 @@ pub fn border_text(slide: &Slide) -> String {
     let separator: &str = " ";
     let mut s: String = String::new();
     
-    let empty_height: usize = slide.dimensions.1 - slide.contents.lines().count();
+    const TAKEN_BY_HORIZONTAL_BORDER: usize = 2;
+    const PROMPT: usize = 1;
+    let empty_height: usize = slide.dimensions.1 - slide.contents.lines().count() - TAKEN_BY_HORIZONTAL_BORDER - PROMPT;
+    let (empty_top, empty_bottom): (usize, usize) =
+        if empty_height%2 == 0 {
+            (empty_height/2, empty_height/2)
+        } else {
+            (empty_height/2+1, empty_height/2)
+        };
     let empty_line: String = space(slide.dimensions.0, slide.margins, "", &slide.text_align, vertical_dash, separator) + "\n";
+
     // upper box
     s.push_str(top_left);
     for _ in 2..slide.dimensions.0 {
         s.push_str(horizontal_dash);
     }
     s.push_str(&(top_right.to_owned() + "\n"));
-
-    for _ in 1..((empty_height as f64 / 2.0 ).round() - 1.0) as usize {
-        s.push_str(&empty_line);
+    {
+        for _ in 0..empty_top {
+            s.push_str(&empty_line);
+        }
     }
 
     // text
@@ -87,8 +97,10 @@ pub fn border_text(slide: &Slide) -> String {
         s.push_str(&(space(slide.dimensions.0, slide.margins, line, &slide.text_align, vertical_dash, separator) + "\n"));
     }
 
-    for _ in 1..empty_height/2 {
-        s.push_str(&empty_line);
+    {
+        for _ in 0..empty_bottom {
+            s.push_str(&empty_line);
+        }
     }
 
     // lower box
