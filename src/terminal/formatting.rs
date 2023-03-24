@@ -1,14 +1,13 @@
 use super::slides::Slide;
 pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, box_char: &str, separator: &str) -> String {
-    //println!("input: {1}, length: {}", input.len(), input);
+    //println!("input: {1}, length: {}", input.len(), input); //debugging
     let extra_whitespace = width - input.len() - (margin.0 + margin.1); // the remaining space in the line, also the box characters removed
     // the extra whitespace is the remaining space in a line after: text, margins, and the extra two characters for the box have been removed
     let mut l: String = String::new();
-    l.push_str(box_char); // pushes the vertical box character
-    if !validate_string_len(width, input, margin) {
-        panic!("String is too large, can't space it");
-    }
+    l.push_str(box_char); 
+
     match align {
+        // the for _ in 1..margin are started at 1 because the box character has to be accounted for
         Align::Left => {
             for _ in 1..margin.0 {
                 l.push_str(separator);
@@ -46,28 +45,17 @@ pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, b
             }
         }
     }
-    // if input.len() % 2 != 0 {
-    //     l.push_str(separator); // you gotta do this because there's one character missing without it
-    // }
     l.push_str(box_char); // pushes the vertical box character
-    // the for _ in 1..margin are started at 1 because the box character has to be accounted for
     return l;
 }
 
-fn validate_string_len(width: usize, input: &str, margin: (usize, usize)) -> bool {
-    let usable = width - margin.0 - margin.1;
-    if input.len() > usable {
-        false
-    } else {
-        true
-    }
-}
-
-#[allow(unused)]
 #[derive(Clone)]
 pub enum Align {
+    #[allow(unused)]
     Left,
+    #[allow(unused)]
     Center,
+    #[allow(unused)]
     Right,
 }
 
