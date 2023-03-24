@@ -1,5 +1,5 @@
 use std::io::Write;
-use std::io::{stdin};
+use std::io::stdin;
 
 mod terminal;
 use crate::terminal::formatting::*;
