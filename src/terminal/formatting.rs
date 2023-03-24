@@ -143,8 +143,10 @@ pub fn slice_str(data: &str, dimensions: &(usize, usize), margins: &(usize, usiz
                     }
                     //println!("Rest of word: {} at {} characters, thought at {} characters, with a max space of {} characters", current_word, current_word.len(), current_word_length, max_len);
                     sliced_str.push_str(current_word); // push the rest of the word that fits in one line
+                    sum = current_word.len();
                 } else {
                     sliced_str.push_str(&format!("\n{}", word));
+                    sum = word.len();
                 }
             }
         }
