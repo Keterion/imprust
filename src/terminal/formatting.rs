@@ -61,8 +61,6 @@ pub enum Align {
     Right,
 }
 
-
-
 pub fn border_text(slide: &Slide) -> String {
     let (top_left, top_right, bottom_left, bottom_right) = ("\u{250c}", "\u{2510}", "\u{2514}", &format!("{}", slide.pos));
     let (horizontal_dash, vertical_dash) = ("\u{2500}", "\u{2502}");
@@ -113,17 +111,33 @@ pub fn border_text(slide: &Slide) -> String {
 }
 
 pub fn slice_str(data: &str, dimensions: &(usize, usize), margins: &(usize, usize)) -> String {
-    // width = self.dimensions.0
-    let mut split_str: String = String::new();
-    let remaining = data.clone().lines();
-    for mut line in remaining {
-        while line.len() > (dimensions.0 - margins.0 - margins.1) {
-            let (part_1, part_2): (&str, &str) = line.split_at(dimensions.0 - margins.0 - margins.1 - 1).to_owned();
-            split_str.push_str(&(part_1.to_owned() + "-\n"));
-            line = &mut part_2.clone();
+    let mut sliced_str: String = String::new();
+    let (mut words, mut sum): (Vec<&str>, usize);
+    let max_len: usize = dimensions.0 - margins.0 - margins.1;
+    for line in data.lines() {
+        sum = 0;
+        // use split_inclusive so that the spacing gets respected -> "  " stays "  "
+        words = line.trim().split_inclusive(" ").collect();
+        for word in words {
+            sum += word.len();
+            if sum < max_len { // if the word fits in the line
+                sliced_str.push_str(&format!("{}", word));
+            } else {
+                if word.len() > max_len { // if you have a width of 10 and a word is 15 chars long, it'd break everything
+                    let mut current_word_length: usize = word.len();
+                    let mut current_word: &str = word;
+                    while current_word_length > max_len { // this splits the word and linewraps it
+                        let (word_part_1, word_part_2) = current_word.split_at(max_len-1); // -1 to add a dash (so the word is connected)
+                        sliced_str.push_str(&format!("\n{}-", word_part_1));
+                        current_word_length = word_part_2.len();
+                        current_word = word_part_2;
+                    }
+                } else {
+                    sliced_str.push_str(&format!("\n{}", word));
+                }
+            }
         }
-        split_str.push_str(line);
-       split_str.push_str("\n");
+        sliced_str.push_str("\n");
     }
-    return split_str;
+    return sliced_str;
 }
