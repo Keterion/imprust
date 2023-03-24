@@ -1,5 +1,6 @@
 use super::slides::Slide;
 pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, box_char: &str, separator: &str) -> String {
+    //println!("input: {1}, length: {}", input.len(), input);
     let extra_whitespace = width - input.len() - (margin.0 + margin.1); // the remaining space in the line, also the box characters removed
     // the extra whitespace is the remaining space in a line after: text, margins, and the extra two characters for the box have been removed
     let mut l: String = String::new();
@@ -127,11 +128,14 @@ pub fn slice_str(data: &str, dimensions: &(usize, usize), margins: &(usize, usiz
                     let mut current_word_length: usize = word.len();
                     let mut current_word: &str = word;
                     while current_word_length > max_len { // this splits the word and linewraps it
-                        let (word_part_1, word_part_2) = current_word.split_at(max_len-1); // -1 to add a dash (so the word is connected)
-                        sliced_str.push_str(&format!("\n{}-", word_part_1));
+                        let (word_part_1, word_part_2) = current_word.split_at(max_len-1); // -1 because there will be a - character added
+                        //println!("Rest of word: '{}-\n' at {} characters with a max space of {} characters", word_part_1, &format!("\n{}-\n", word_part_1).len(), max_len);
+                        sliced_str.push_str(&format!("\n{}-\n", word_part_1));
                         current_word_length = word_part_2.len();
                         current_word = word_part_2;
                     }
+                    //println!("Rest of word: {} at {} characters, thought at {} characters, with a max space of {} characters", current_word, current_word.len(), current_word_length, max_len);
+                    sliced_str.push_str(current_word); // push the rest of the word that fits in one line
                 } else {
                     sliced_str.push_str(&format!("\n{}", word));
                 }
