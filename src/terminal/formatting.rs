@@ -19,11 +19,20 @@ pub fn space(width: usize, margin: (usize, usize), input: &str, align: &Align, b
             }
         },
         Align::Center => {
-            for _ in 1..(margin.0 + extra_whitespace/2) {
+            let (margin_left, margin_right) = 
+                if extra_whitespace%2 == 0 {
+                    (extra_whitespace/2, extra_whitespace/2)
+                } else {
+                    (extra_whitespace/2, extra_whitespace/2+1)
+                };
+            // margin left
+            for _ in 1..(margin.0 + margin_left) {
                 l.push_str(separator);
             }
+            // text
             l.push_str(input);
-            for _ in 1..(margin.1 + extra_whitespace/2) {
+            // margin right
+            for _ in 1..(margin.1 + margin_right) {
                 l.push_str(separator);
             }
         },

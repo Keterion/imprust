@@ -10,18 +10,19 @@ use term_size;
 use clearscreen::clear;
 
 type Dims = (usize, usize);
+
 fn main() {
 
     let term_dims: Dims = term_size::dimensions().expect("Couldn't get terminal dimensions");
     // term_dims.0 -> width
-    let padding: Dims = (
+    let margins: Dims = (
         (term_dims.0 as f32 * 0.125 as f32).round() as usize, // the small number is a percentage
         (term_dims.0 as f32 * 0.125 as f32).round() as usize
     );
 
     let greeting = read_file("Greeting.md");
     let slides: Vec<&str> = greeting.split("*new_slide*").map(|s| s.trim()).collect();
-    let mut handler: Handler = Handler::new(slides, term_dims, padding, Align::Center);
+    let mut handler: Handler = Handler::new(slides, term_dims, margins, Align::Center);
     
     let mut s: String = String::new();
     _ = clear();
