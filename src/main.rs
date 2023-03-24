@@ -20,7 +20,7 @@ fn main() {
         (term_dims.0 as f32 * 0.125 as f32).round() as usize
     );
 
-    let greeting = read_file("Greeting.md");
+    let greeting = parse_args();
     let slides: Vec<&str> = greeting.split("*new_slide*").map(|s| s.trim()).collect();
     let mut handler: Handler = Handler::new(slides, term_dims, margins, Align::Center);
     
