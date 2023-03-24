@@ -86,10 +86,10 @@ pub fn border_text(slide: &Slide) -> String {
         s.push_str(horizontal_dash);
     }
     s.push_str(&(top_right.to_owned() + "\n"));
-    {
-        for _ in 0..empty_top {
-            s.push_str(&empty_line);
-        }
+
+    // empty lines
+    for _ in 0..empty_top {
+        s.push_str(&empty_line);
     }
 
     // text
@@ -97,10 +97,9 @@ pub fn border_text(slide: &Slide) -> String {
         s.push_str(&(space(slide.dimensions.0, slide.margins, line, &slide.text_align, vertical_dash, separator) + "\n"));
     }
 
-    {
-        for _ in 0..empty_bottom {
-            s.push_str(&empty_line);
-        }
+    // empty lines
+    for _ in 0..empty_bottom {
+        s.push_str(&empty_line);
     }
 
     // lower box
