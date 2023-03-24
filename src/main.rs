@@ -20,7 +20,7 @@ fn main() {
     );
 
     let greeting = read_file("Greeting.md");
-    let slides: Vec<&str> = greeting.split("\\sep(erator)\\").map(|s| s.trim()).collect();
+    let slides: Vec<&str> = greeting.split("*new_slide*").map(|s| s.trim()).collect();
     let mut handler: Handler = Handler::new(slides, term_dims, padding, Align::Left);
     
     let mut s: String = String::new();

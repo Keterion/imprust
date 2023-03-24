@@ -68,9 +68,16 @@ pub fn border_text(slide: &Slide) -> String {
     let separator: &str = " ";
     let mut s: String = String::new();
     
-    const TAKEN_BY_HORIZONTAL_BORDER: usize = 2;
-    const PROMPT: usize = 1;
-    let empty_height: usize = slide.dimensions.1 - slide.contents.lines().count() - TAKEN_BY_HORIZONTAL_BORDER - PROMPT;
+    const TAKEN_BY_HORIZONTAL_BORDER: isize = 2;
+    const PROMPT: isize = 1;
+    let empty_height: usize = {
+        let space: isize = slide.dimensions.1 as isize - slide.contents.lines().count() as isize - TAKEN_BY_HORIZONTAL_BORDER - PROMPT;
+        if space < 0 {
+            0
+        } else {
+            space as usize
+        }
+    };
     let (empty_top, empty_bottom): (usize, usize) =
         if empty_height%2 == 0 {
             (empty_height/2, empty_height/2)

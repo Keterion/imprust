@@ -3,12 +3,12 @@ A slow cli presentation thingy.
 The presentation format is in markdown and three dashes are used to separate slides.
 It doesn't btw. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
-\sep(erator)\
+*new_slide*
 
 Penis =    funny
 
 
-\sep(erator)\
+*new_slide*
 .--.
 |__| .-------.
 |=.| |.-----.|
@@ -16,7 +16,7 @@ Penis =    funny
 |  | |'-----'|
 |__|~')_____('
 
-\sep(erator)\
+*new_slide*
 
 Lets goo amogus
 sussy baka
