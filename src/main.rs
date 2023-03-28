@@ -45,10 +45,8 @@ impl Handler {
         Handler {
             slides: {
                 let mut v: Vec<Slide> = vec![];
-                let mut i = 0;
                 for text in contents {
-                    v.push( Slide::new(text, &dimensions, &margins, &align, i) );
-                    i += 1;
+                    v.push( Slide::new(text, &dimensions, &margins, &align) );
                 }
                 v
             },
