@@ -1,4 +1,4 @@
-use super::formatting::{text_formatting::*, text_coloring};
+use super::formatting::{text_formatting::*, markdown_formatting};
 
 pub struct Slide {
     pub dimensions: (usize, usize),
@@ -11,9 +11,21 @@ pub struct Slide {
 }
 
 impl Slide {
-    pub fn new(contents: &str, dimensions: &(usize, usize), margins: &(usize, usize), align: &Align) -> Slide {
+    pub fn new(mut contents: &str, dimensions: &(usize, usize), margins: &(usize, usize)) -> Slide {
+        let (align, found): (Align, bool) = {
+            let first_line = contents.lines().nth(0).unwrap();
+            match first_line {
+                "**align_left**" => (Align::Left, true),
+                "**align_center**" => (Align::Center, true),
+                "**align_right**" => (Align::Right, true),
+                _ => (Align::Left, false),
+            }
+        };
+        if found {
+            contents = contents.split_once("\n").unwrap().1;
+        }
         let lines: Vec<Line> = slice_str(contents, dimensions, margins).iter().map(|line|{
-            Line::new(&line, margins.to_owned(), dimensions.0, align.to_owned())
+            Line::new(&line, margins.to_owned(), dimensions.0, &align)
         }).collect();
         // upper left, upper right, lower left, lower right, horizontal dash, vertical dash
         let border_chars: Vec<String> = vec!["┌", "┐", "└", "┘", "─", "│"].iter().map(|char| char.to_owned().to_owned()).collect();
@@ -46,12 +58,12 @@ pub struct Line {
 }
 
 impl Line {
-    pub fn new(contents: &str, margins: (usize, usize), terminal_width: usize, align: Align) -> Line {
+    pub fn new(contents: &str, margins: (usize, usize), terminal_width: usize, align: &Align) -> Line {
         let content_length = contents.len();
         let margin_length = margins.0 + margins.1;
         let total_filled_length = content_length + margin_length;
         let missing_line_space = terminal_width - total_filled_length;
-        println!("Width: {terminal_width}\nContent length: {content_length}\nMargin length: {margin_length}\nTotal: {total_filled_length}\nMissing spaces: {missing_line_space}");
+        //println!("Width: {terminal_width}\nContent length: {content_length}\nMargin length: {margin_length}\nTotal: {total_filled_length}\nMissing spaces: {missing_line_space}");
         let space_filling: (usize, usize) = match align {
             Align::Left => {
                 (margins.0, margins.1 + missing_line_space)
@@ -92,7 +104,7 @@ impl Line {
         spaced_line.push_str(&left_space);
         spaced_line.push_str(
             &if highlighting{
-                text_coloring::colorize_headings(&self.contents)
+                markdown_formatting::colorize_headings(&self.contents)
             } else {
                 self.contents.clone()
             }

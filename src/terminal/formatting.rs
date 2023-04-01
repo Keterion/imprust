@@ -114,7 +114,7 @@ pub mod text_formatting {
     }
 }
 
-pub mod text_coloring {
+pub mod markdown_formatting {
     use colored::Colorize;
     pub fn colorize_headings(line: &str) -> String {
         match line.trim().split_whitespace().nth(0).unwrap() {

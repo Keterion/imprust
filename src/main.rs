@@ -2,7 +2,6 @@ use std::io::Write;
 use std::io::stdin;
 
 mod terminal;
-use crate::terminal::formatting::text_formatting::Align;
 use crate::terminal::slides::*;
 use crate::terminal::io::*;
 
@@ -22,10 +21,10 @@ fn main() {
 
     let greeting = parse_args();
     let slides: Vec<&str> = greeting.split("*new_slide*").map(|s| s.trim()).collect();
-    let mut handler: Handler = Handler::new(slides, term_dims, margins, Align::Center);
+    let mut handler: Handler = Handler::new(slides, term_dims, margins);
     
     let mut s: String = String::new();
-    _ = clear();
+    //_ = clear();
     loop {
         print!(">> ");
         _ = std::io::stdout().flush();
@@ -41,12 +40,12 @@ struct Handler {
 }
 
 impl Handler {
-    pub fn new(contents: Vec<&str>, dimensions: Dims, margins: Dims, align: Align) -> Handler {
+    pub fn new(contents: Vec<&str>, dimensions: Dims, margins: Dims) -> Handler {
         Handler {
             slides: {
                 let mut v: Vec<Slide> = vec![];
                 for text in contents {
-                    v.push( Slide::new(text, &dimensions, &margins, &align) );
+                    v.push( Slide::new(text, &dimensions, &margins) );
                 }
                 v
             },
