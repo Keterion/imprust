@@ -2,7 +2,7 @@ use std::io::Write;
 use std::io::stdin;
 
 mod terminal;
-use crate::terminal::formatting::*;
+use crate::terminal::formatting::text_formatting::Align;
 use crate::terminal::slides::*;
 use crate::terminal::io::*;
 
@@ -27,7 +27,7 @@ fn main() {
     let mut s: String = String::new();
     _ = clear();
     loop {
-        print!("n: next | b: back | gt [num]: goto num >> ");
+        print!(">> ");
         _ = std::io::stdout().flush();
         _ = stdin().read_line(&mut s).unwrap();
         handler.parse_command(&s);
@@ -57,6 +57,7 @@ impl Handler {
         match command.trim() {
             "n" => self.next(),
             "b" => self.back(),
+            "help" => self::Handler::help(),
             _ => {
                 if command.contains("gt") {
                     let pos: usize = command.split(" ")
@@ -67,6 +68,8 @@ impl Handler {
                         .expect(&format!("Not a positive integer: {}", command.split(" ").nth(1).unwrap())
                     );
                     self.go_to(pos);
+                } else {
+                    self.next();
                 }
             }
 
@@ -99,5 +102,14 @@ impl Handler {
     fn display_current(&self) {
         _ = clear();
         self.slides.get(self.curr_pos).unwrap().display();
+    }
+
+    fn help() {
+        _ = clear();
+        println!("n: next");
+        println!("b: back");
+        println!("gt [num]: go to [num]");
+        println!("none: next");
+        println!("help: display this dialog");
     }
 }

@@ -1,12 +1,12 @@
-use super::formatting::*;
+use super::formatting::{text_formatting::*, text_coloring};
 
 pub struct Slide {
     pub dimensions: (usize, usize),
     pub margins: (usize, usize),
     pub text_align: Align,
     outline: bool,
-    pub lines: Vec<Line>,
-    pub bordered_text: String,
+    lines: Vec<Line>,
+    bordered_text: String,
     pub border_chars: Vec<String>,
 }
 
@@ -73,10 +73,10 @@ impl Line {
             box_character: "\u{2502}".to_owned(),
         }
     }
-    pub fn format_line(&self, boxed: bool) -> String {
+    pub fn format_line(&self, boxed: bool, highlighting: bool) -> String {
         let mut spaced_line: String = String::new();
         let box_character_length: usize = 1;
-        println!("{} length: {}", self.box_character, box_character_length);
+        //println!("{} length: {}", self.box_character, box_character_length);
         let left_space = if boxed {
             println!("{}", self.space_fill.0);
             self.box_character.to_owned() + &String::from_utf8(vec![b' '; self.space_fill.0 - box_character_length]).unwrap()
@@ -90,7 +90,13 @@ impl Line {
             String::from_utf8(vec![b' '; self.space_fill.1]).unwrap()
         };
         spaced_line.push_str(&left_space);
-        spaced_line.push_str(&self.contents);
+        spaced_line.push_str(
+            &if highlighting{
+                text_coloring::colorize_headings(&self.contents)
+            } else {
+                self.contents.clone()
+            }
+        );
         spaced_line.push_str(&right_space);
         return spaced_line;
     }
