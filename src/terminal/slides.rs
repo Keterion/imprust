@@ -90,13 +90,13 @@ impl Line {
         let box_character_length: usize = 1;
         //println!("{} length: {}", self.box_character, box_character_length);
         let left_space = if boxed {
-            println!("{}", self.space_fill.0);
+            //println!("{}", self.space_fill.0);
             self.box_character.to_owned() + &String::from_utf8(vec![b' '; self.space_fill.0 - box_character_length]).unwrap()
         } else {
             String::from_utf8(vec![b' '; self.space_fill.0]).unwrap()
         };
         let right_space = if boxed {
-            println!("{}", self.space_fill.1);
+            //println!("{}", self.space_fill.1);
             String::from_utf8(vec![b' '; self.space_fill.1 - box_character_length]).unwrap() + &self.box_character
         } else {
             String::from_utf8(vec![b' '; self.space_fill.1]).unwrap()

@@ -24,7 +24,7 @@ fn main() {
     let mut handler: Handler = Handler::new(slides, term_dims, margins);
     
     let mut s: String = String::new();
-    //_ = clear();
+    _ = clear();
     loop {
         print!(">> ");
         _ = std::io::stdout().flush();
@@ -59,12 +59,12 @@ impl Handler {
             "help" => self::Handler::help(),
             _ => {
                 if command.contains("gt") {
-                    let pos: usize = command.split(" ")
+                    let pos: isize = command.split(" ")
                         .nth(1)
                         .unwrap()
                         .trim()
                         .parse()
-                        .expect(&format!("Not a positive integer: {}", command.split(" ").nth(1).unwrap())
+                        .expect(&format!("\nInteger overflow: {}", command.split(" ").nth(1).unwrap())
                     );
                     self.go_to(pos);
                 } else {
@@ -90,12 +90,16 @@ impl Handler {
         self.curr_pos -= 1;
         self.display_current();
     }
-    fn go_to(&mut self, n_pos: usize) {
-        if n_pos > (self.slides.len()-1) {
-            self.display_current();
-            return;
+    fn go_to(&mut self, n_pos: isize) {
+        if n_pos >= 0 {
+            if n_pos as usize > (self.slides.len()-1) {
+                self.curr_pos = self.slides.len()-1; // if its larger go to last slide as index
+            } else {
+                self.curr_pos = n_pos as usize;
+            }
+        } else {
+            self.curr_pos = 0; // if its smaller than 0 go to the first slide
         }
-        self.curr_pos = n_pos;
         self.display_current();
     }
     fn display_current(&self) {

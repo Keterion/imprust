@@ -27,3 +27,8 @@ Penis =    funny
 ###### hello
 Lets goo amogus
 sussy baka
+```rust
+fn main() {
+    println!("Hello World!");
+}
+```
